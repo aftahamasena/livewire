@@ -19,4 +19,5 @@ Project ini adalah aplikasi berbasis [Laravel](https://laravel.com/) dengan [Liv
 git clone https://github.com/aftahamasena/livewire.git
 cd livewire
 npm install
-npm install
+cp .env.example .env
+

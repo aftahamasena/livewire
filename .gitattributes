@@ -1,11 +1,52 @@
-* text=auto eol=lf
+# Auto detect text files and perform LF normalization
+* text=auto
 
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
+# Laravel specific
+*.blade.php text
+*.php text
+*.js text
+*.css text
+*.json text
+*.md text
+*.txt text
+*.yml text
+*.yaml text
+*.xml text
+*.sql text
 
-/.github export-ignore
-CHANGELOG.md export-ignore
-.styleci.yml export-ignore
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.rar binary
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Composer
+composer.lock text
+composer.json text
+
+# NPM
+package-lock.json text
+package.json text
+
+# Environment files
+.env.example text
+.env.*.example text
+
+# Documentation
+README.md text
+CHANGELOG.md text
+LICENSE text
+
+# Git
+.gitignore text
+.gitattributes text

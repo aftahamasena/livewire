@@ -10,35 +10,44 @@ class Login extends Component
 {
     public $email;
     public $password;
+    public $remember = false;
+    public $intendedUrl;
+    public $errorMessage = null;
 
     protected $rules = [
         'email' => 'required|email',
         'password' => 'required|string|min:6',
     ];
 
+    public function mount()
+    {
+        // Ambil intended URL jika ada
+        $this->intendedUrl = session()->get('url.intended', '/');
+    }
+
     public function login()
     {
         $this->validate();
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
             $user = Auth::user();
+
+            // Redirect berdasarkan role
             if ($user->role === Role::admin) {
-                return redirect()->intended('/admin/dashboard');
+                // Admin selalu redirect ke admin panel
+                return redirect('/admin');
             } else {
-                return redirect()->intended('/');
+                // User biasa redirect ke home
+                return redirect('/');
             }
         } else {
-            $this->addError('email', 'Invalid credentials.');
+            $this->errorMessage = 'Invalid email or password.';
         }
     }
 
     public function render()
     {
-        return view('livewire.auth.login')
-            ->layout(
-                'components.layouts.app',
-                ['title' => 'Login']
-            );
+        return view('livewire.auth.login');
     }
 }

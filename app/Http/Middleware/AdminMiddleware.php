@@ -19,16 +19,17 @@ class AdminMiddleware
     {
         // Pastikan user sudah login
         if (!Auth::check()) {
+            // Simpan intended URL untuk redirect setelah login
+            session()->put('url.intended', $request->url());
             return redirect('/login');
         }
 
         $user = Auth::user();
 
-        // Cek role user, sesuaikan atribut role sesuai di database
+        // Cek role user
         if ($user->role !== Role::admin) {
-            abort(403, 'Unauthorized');
-            // atau redirect ke halaman lain jika mau
-            // return redirect('/');
+            // User biasa tidak boleh akses halaman admin
+            abort(403, 'Access denied. Admin privileges required.');
         }
 
         return $next($request);

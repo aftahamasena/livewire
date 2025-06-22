@@ -12,7 +12,8 @@ class Register extends Component
     public $name;
     public $email;
     public $password;
-    public $password_confirmation;
+    public $passwordConfirmation;
+    public $errorMessage = null;
 
     protected $rules = [
         'name' => 'required|string|min:3',
@@ -24,19 +25,23 @@ class Register extends Component
     {
         $this->validate();
 
-        User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => $this->password,
-            'role' => Role::user,
-        ]);
+        try {
+            User::create([
+                'name' => $this->name,
+                'email' => $this->email,
+                'password' => Hash::make($this->password),
+                'role' => Role::user,
+            ]);
 
-        session()->flash('success', 'Registration successful. You can now login.');
-        return redirect()->route('login');
+            session()->flash('success', 'Registration successful. You can now login.');
+            return redirect()->route('login');
+        } catch (\Exception $e) {
+            $this->errorMessage = 'Registration failed. Please try again.';
+        }
     }
 
     public function render()
     {
-        return view('livewire.auth.register')->layout('components.layouts.app', ['title' => 'Register']);
+        return view('livewire.auth.register');
     }
 }
